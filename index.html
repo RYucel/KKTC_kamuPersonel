@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KKTC Kamu Personeli İstatistik Paneli</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.08); }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="max-w-7xl mx-auto p-6 md:p-10">
+        
+        <!-- Header -->
+        <header class="mb-10 border-b border-slate-200 pb-6">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center border border-red-100">
+                    <span class="text-red-500 font-bold text-sm">⬢</span>
+                </div>
+                <p class="text-sm font-medium text-red-500 tracking-widest uppercase">KKTC Kamu Yönetimi ve İnsan Kaynakları Başkanlığı</p>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2">Fiilen Çalışan Personel İstatistikleri</h1>
+            <p class="text-slate-500 mt-1">2007 - 2026 Karşılaştırmalı Analiz ve Güncel Dağılım Raporu</p>
+        </header>
+
+        <!-- KPI Cards (Comparison) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                <p class="text-sm text-slate-500 font-medium">Toplam Fiilen Çalışan</p>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2">17.864</h2>
+                <div class="mt-3 flex items-center space-x-2">
+                    <span class="badge bg-green-100 text-green-700">+26.4% (19 Yıl)</span>
+                    <span class="text-xs text-slate-400">2007: 14.123</span>
+                </div>
+            </div>
+            <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                <p class="text-sm text-slate-500 font-medium">Kadın Personel Oranı</p>
+                <h2 class="text-3xl font-bold text-pink-500 mt-2">%53.4</h2>
+                <div class="mt-3 flex items-center space-x-2">
+                    <span class="badge bg-pink-100 text-pink-700">+10.5 Puan Artış</span>
+                    <span class="text-xs text-slate-400">2007: %42.87</span>
+                </div>
+            </div>
+            <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                <p class="text-sm text-slate-500 font-medium">Erkek Personel Oranı</p>
+                <h2 class="text-3xl font-bold text-blue-500 mt-2">%46.6</h2>
+                <div class="mt-3 flex items-center space-x-2">
+                    <span class="badge bg-blue-100 text-blue-700">-10.5 Puan Düşüş</span>
+                    <span class="text-xs text-slate-400">2007: %57.13</span>
+                </div>
+            </div>
+            <div class="card bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-xl shadow-md text-white">
+                <p class="text-sm font-medium text-slate-300">Güncel Kadro Durumu (2026)</p>
+                <div class="flex items-end mt-2 space-x-4">
+                    <div>
+                        <span class="text-3xl font-bold text-green-400">%66</span>
+                        <p class="text-xs text-slate-400">Doluluk</p>
+                    </div>
+                    <div class="border-l border-slate-700 h-10"></div>
+                    <div>
+                        <span class="text-3xl font-bold text-red-400">%34</span>
+                        <p class="text-xs text-slate-400">Münhal (Boş)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 19 Year Comparison Chart -->
+        <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-10">
+            <h3 class="text-lg font-semibold text-slate-900 mb-1">19 Yıllık İstihdam ve Cinsiyet Dağılımı Karşılaştırması</h3>
+            <p class="text-sm text-slate-500 mb-6">Kamu personel yapısının 2007'den 2026'ya nasıl evrildiği.</p>
+            <div class="h-[350px]">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 2026 Status Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                <h3 class="text-lg font-semibold text-slate-900 mb-4">2026 Cinsiyet Dağılımı</h3>
+                <div class="flex justify-center items-center h-64">
+                    <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+            <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm lg:col-span-2">
+                <h3 class="text-lg font-semibold text-slate-900 mb-4">2026 Kadro Durumu (Dolu vs Münhal)</h3>
+                <div class="h-64">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temporary Staff Section -->
+        <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-10">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-900">Geçici ve Daimi Olmayan Statüdeki Personel (2026)</h3>
+                    <p class="text-sm text-slate-500 mt-1">Kadroya bağlı olmayan, geçici istihdam edilen personellerin büyüklük ve cinsiyet dağılımı.</p>
+                </div>
+                <div class="mt-4 md:mt-0 bg-amber-50 px-4 py-2 rounded-lg text-amber-700 text-sm font-semibold">
+                    Toplam Geçici Personel: 3.080 Kişi
+                </div>
+            </div>
+            <div class="h-[300px]">
+                <canvas id="tempStaffChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Comparison 2007 vs 2026 -->
+        <div class="card bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-10">
+            <h3 class="text-lg font-semibold text-slate-900 mb-1">İstihdam Şekillerine Göre Karşılaştırma</h3>
+            <p class="text-sm text-slate-500 mb-6">Birim bazında 2007 ve 2026 fiilen çalışan personel sayıları.</p>
+            <div class="h-[500px]">
+                <canvas id="categoryComparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-sm text-slate-400 mt-10 pb-6">
+            KKTC Kamu Yönetimi ve İnsan Kaynakları Başkanlığı Veri Görselleştirme Raporu &copy; 2026
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            // 1. 19-Year Comparison Chart (Grouped Bar)
+            const compCtx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(compCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Kadın Personel', 'Erkek Personel', 'Toplam Personel'],
+                    datasets: [
+                        { label: '2007', data: [6054, 8069, 14123], backgroundColor: '#94a3b8', borderRadius: 6, barPercentage: 0.6 },
+                        { label: '2026', data: [9533, 8331, 17864], backgroundColor: '#0f172a', borderRadius: 6, barPercentage: 0.6 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: (v) => v.toLocaleString('tr-TR') } } },
+                    plugins: { 
+                        legend: { position: 'top', align: 'end', labels: { usePointStyle: true, padding: 20 } },
+                        tooltip: { callbacks: { label: (c) => `${c.dataset.label}: ${c.raw.toLocaleString('tr-TR')} kişi` } }
+                    }
+                }
+            });
+
+            // 2. 2026 Gender Chart (Donut)
+            const genderCtx = document.getElementById('genderChart').getContext('2d');
+            new Chart(genderCtx, {
+                type: 'doughnut',
+                data: { labels: ['Kadın', 'Erkek'], datasets: [{ data: [9533, 8331], backgroundColor: ['#ec4899', '#3b82f6'], borderWidth: 0, hoverOffset: 8 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '75%',
+                    plugins: { 
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                        tooltip: { callbacks: { label: (c) => { let t = c.chart.data.datasets[0].data.reduce((a,b)=>a+b,0); return `${c.label}: ${c.raw.toLocaleString('tr-TR')} (%${(c.raw/t*100).toFixed(1)})`; } } }
+                    }
+                }
+            });
+
+            // 3. 2026 Status Chart (Stacked Bar)
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            new Chart(statusCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Memur', 'Daimi İşçi', 'Polis Örgütü', 'İlk Öğr. Öğrt.', 'Sözleşmeli', 'Polis (Sivil)', 'Yargıç/Savcı'],
+                    datasets: [
+                        { label: 'Çalışan', data: [5533, 408, 2478, 1650, 374, 346, 93], backgroundColor: '#10b981', borderRadius: 4 },
+                        { label: 'Münhal (Boş)', data: [8922, 1977, 522, 768, 79, 88, 39], backgroundColor: '#f43f5e', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { display: false } } },
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                }
+            });
+
+            // 4. Temporary Staff Chart
+            const tempCtx = document.getElementById('tempStaffChart').getContext('2d');
+            new Chart(tempCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Geçici İşçi', 'Geçici Memur', 'Kad. Karş. Alınan Geç. Öğrt.', 'Mevsimlik İşçi'],
+                    datasets: [
+                        { label: 'Kadın', data: [730, 467, 303, 2], backgroundColor: '#f472b6', borderRadius: 4 },
+                        { label: 'Erkek', data: [1152, 347, 76, 3], backgroundColor: '#60a5fa', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#f1f5f9' }, ticks: { callback: (v) => v.toLocaleString('tr-TR') } } },
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                }
+            });
+
+            // 5. Category Comparison (2007 vs 2026 Horizontal Bar)
+            const catCompCtx = document.getElementById('categoryComparisonChart').getContext('2d');
+            new Chart(catCompCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Memur', 'Genel Orta Öğr. Öğrt.', 'Polis Örgütü', 'İlk Öğr. Öğrt.', 'Mesleki Tek. Öğrt.', 'Daimi İşçi', 'Sözleşmeli', 'Polis (Sivil)'],
+                    datasets: [
+                        { label: '2007 Çalışan', data: [5021, 1522, 2260, 1454, 464, 1882, 140, 137], backgroundColor: '#cbd5e1', borderRadius: 3 },
+                        { label: '2026 Çalışan', data: [5533, 2404, 2478, 1650, 662, 408, 374, 346], backgroundColor: '#3b82f6', borderRadius: 3 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                    scales: { x: { stacked: false, grid: { color: '#f1f5f9' }, ticks: { callback: (v) => v.toLocaleString('tr-TR') } }, y: { stacked: false, grid: { display: false } } },
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } } }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
